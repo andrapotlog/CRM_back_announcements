@@ -13,19 +13,36 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     @Autowired
     private AnnouncementRepo announcementRepository;
 
-    public List<Announcement> getAllAnnouncements() {
-        return announcementRepository.findAll();
+    @Autowired
+    private UserServiceImpl userServiceImpl;
+
+    @Autowired
+    private EmailClientService emailClientService;
+
+    @Override
+    public List<Announcement> getAllAnnouncements(boolean isUser, Integer location) {
+        return announcementRepository.findByAreaAffectedOrNoAreaAffected(isUser, location);
     }
 
+    @Override
     public Optional<Announcement> getAnnouncementById(Long id) {
         return announcementRepository.findById(id);
     }
 
+    @Override
     public Announcement createAnnouncement(Announcement announcement) {
         return announcementRepository.save(announcement);
     }
 
+    @Override
     public void deleteAnnouncement(Long id) {
         announcementRepository.deleteById(id);
+    }
+
+    @Override
+    public void sendAnnouncementToAllUsers(Integer areaAffected,String subject, String text) {
+        List<String> userEmails = userServiceImpl.getAllUserEmails(areaAffected);
+        System.out.println(userEmails.get(0));
+        emailClientService.sendEmails(userEmails, subject,text);
     }
 }

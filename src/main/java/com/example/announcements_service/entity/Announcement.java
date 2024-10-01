@@ -6,13 +6,6 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-enum Status {
-    active,
-    inactive,
-    undefined,
-    done
-}
-
 @Entity
 @Table(name="announcements")
 @Getter
@@ -33,7 +26,7 @@ public class Announcement {
 
     @Enumerated(EnumType.STRING)
     @Column(name="status")
-    private Status status = Status.undefined;
+    private Status status = Status.done;
 
     @Column(name = "author_id")
     private Long authorId;
@@ -42,6 +35,6 @@ public class Announcement {
     private String category;
 
     @Column(name = "area_affected")
-    private String areaAffected;
+    private Integer areaAffected;
 }
 
